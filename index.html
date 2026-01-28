@@ -28,7 +28,6 @@
     <div class="header">
         <div class="container">
             <div class="d-flex align-items-center justify-content-center">
-                <!-- LOGO - Substitua pelo caminho da sua logo -->
                 <img src="logo-horizontal.png" 
                      alt="Bandeira de Juiz de Fora" 
                      class="logo-header">
@@ -42,9 +41,7 @@
     </div>
 
     <div class="container py-4">
-        <form id="formInterdicao" method="POST" netlify enctype="multipart/form-data">
-            
-            <!-- INFORMAÇÃO SOBRE O PROTOCOLO -->
+       <form id="formInterdicao">
             <div class="protocolo-info">
                 <h5><i class="bi bi-info-circle"></i> Informação Importante</h5>
                 <p class="mb-0">Este formulário é para complementar dados de uma solicitação já existente. 
@@ -351,197 +348,88 @@
         </form>
     </div>
 
-    <!-- JavaScript -->
-    <script>
-        // Array com IDs de todas as seções que serão mostradas depois
-        const secoesOcultas = [
-            'divisor-secoes',
-            'secao-periodo',
-            'secao-local',
-            'secao-interdicao',
-            'secao-sinalizacao',
-            'secao-agentes',
-            'secao-veiculos',
-            'secao-anexos',
-            'secao-observacoes',
-            'div-botoes'
-        ];
+   <script>
+    const secoesOcultas = [
+        'divisor-secoes',
+        'secao-periodo',
+        'secao-local',
+        'secao-interdicao',
+        'secao-sinalizacao',
+        'secao-agentes',
+        'secao-veiculos',
+        'secao-anexos',
+        'secao-observacoes',
+        'div-botoes'
+    ];
 
-        // Elementos que serão monitorados
-        const inputParticipantes = document.getElementById('input-participantes');
-        const mensagemInicial = document.getElementById('mensagem-inicial');
+    const inputParticipantes = document.getElementById('input-participantes');
+    const mensagemInicial = document.getElementById('mensagem-inicial');
 
-        // Função para verificar se pode mostrar as seções
-        function verificarParticipantes() {
-            const participantes = parseInt(inputParticipantes.value);
-            
-            if (participantes >= 1) {
-                // Esconder mensagem inicial
-                mensagemInicial.style.display = 'none';
-                
-                // Mostrar todas as seções ocultas
-                secoesOcultas.forEach(id => {
-                    const elemento = document.getElementById(id);
-                    if (elemento) {
-                        elemento.style.display = 'block';
-                        elemento.classList.remove('hidden-section');
-                    }
-                });
-                
-                // Configurar datas mínimas
-                const hoje = new Date().toISOString().split('T')[0];
-                document.getElementById('input-data-evento').min = hoje;
-                document.getElementById('input-data-interdicao').min = hoje;
-                
-                // Rolar suavemente para a primeira seção mostrada
-                document.getElementById('divisor-secoes').scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start' 
-                });
-                
+    function verificarParticipantes() {
+        const participantes = parseInt(inputParticipantes.value);
+        if (participantes >= 1) {
+            mensagemInicial.style.display = 'none';
+            secoesOcultas.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'block';
+            });
+        } else {
+            secoesOcultas.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+            mensagemInicial.style.display = 'block';
+        }
+    }
+
+    inputParticipantes.addEventListener('input', verificarParticipantes);
+
+    document.getElementById('input-protocolo').addEventListener('input', e => {
+        document.getElementById('numero-protocolo-display').textContent =
+            e.target.value || '_____';
+    });
+    document.getElementById('formInterdicao').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        let linhas = [];
+        linhas.push(['Campo', 'Valor']);
+
+        for (let [chave, valor] of formData.entries()) {
+            if (valor instanceof File) {
+                linhas.push([chave, valor.name || '']);
             } else {
-                // Esconder todas as seções
-                secoesOcultas.forEach(id => {
-                    const elemento = document.getElementById(id);
-                    if (elemento) {
-                        elemento.style.display = 'none';
-                        elemento.classList.add('hidden-section');
-                    }
-                });
-                
-                // Mostrar mensagem inicial
-                mensagemInicial.style.display = 'block';
+                linhas.push([chave, valor]);
             }
         }
 
-        // Atualizar número do protocolo na declaração
-        document.getElementById('input-protocolo').addEventListener('input', function(e) {
-            const protocolo = e.target.value;
-            document.getElementById('numero-protocolo-display').textContent = protocolo || '_____';
-        });
+        // Checkbox interdição parcial
+        const parcial = document.getElementById('interdicao_parcial').checked ? 'Sim' : 'Não';
+        linhas.push(['interdicao_parcial', parcial]);
 
-        // Monitorar alteração no campo de participantes
-        inputParticipantes.addEventListener('input', verificarParticipantes);
-        inputParticipantes.addEventListener('change', verificarParticipantes);
+        const csv = linhas
+            .map(l => l.map(v => `"${String(v).replace(/"/g, '""')}"`).join(';'))
+            .join('\n');
 
-        // Validações do formulário
-        document.getElementById('formInterdicao').addEventListener('submit', function(e) {
-            // Validar protocolo
-            const protocolo = document.getElementById('input-protocolo').value.trim();
-            if (!protocolo) {
-                e.preventDefault();
-                alert('Por favor, informe o número do protocolo.');
-                return false;
-            }
+        const protocolo = document.getElementById('input-protocolo').value || 'SEM_PROTOCOLO';
+        const nomeArquivo = `Interdicao_SMU_${protocolo}.csv`;
 
-            // Validar participantes
-            const participantes = parseInt(inputParticipantes.value);
-            if (participantes < 1) {
-                e.preventDefault();
-                alert('O número de participantes deve ser pelo menos 1.');
-                return false;
-            }
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = nomeArquivo;
+        link.click();
 
-            // Validar datas
-            const dataEvento = document.getElementById('input-data-evento').value;
-            const dataInterdicao = document.getElementById('input-data-interdicao').value;
-            const hoje = new Date().toISOString().split('T')[0];
-            
-            if (dataEvento < hoje) {
-                e.preventDefault();
-                alert('A data do evento não pode ser anterior à hoje.');
-                return false;
-            }
-            
-            if (dataInterdicao < hoje) {
-                e.preventDefault();
-                alert('A data da interdição não pode ser anterior à hoje.');
-                return false;
-            }
-            
-            // Validar horários
-            const horaInicio = document.getElementById('input-hora-inicio').value;
-            const horaTermino = document.getElementById('input-hora-termino').value;
-            
-            if (horaInicio >= horaTermino) {
-                e.preventDefault();
-                alert('A hora de término do evento deve ser posterior à hora de início.');
-                return false;
-            }
-            
-            const horaInterdicaoInicio = document.getElementById('input-hora-interdicao-inicio').value;
-            const horaInterdicaoTermino = document.getElementById('input-hora-interdicao-termino').value;
-            
-            if (horaInterdicaoInicio >= horaInterdicaoTermino) {
-                e.preventDefault();
-                alert('A hora de término da interdição deve ser posterior à hora de início.');
-                return false;
-            }
-            
-            // Validar arquivos obrigatórios
-            const fileOficio = document.getElementById('input-file-oficio').files.length;
-            const fileCroqui = document.getElementById('input-file-croqui').files.length;
-            
-            if (fileOficio === 0) {
-                e.preventDefault();
-                alert('Por favor, anexe o Ofício/Baixo-assinado. Este documento é obrigatório.');
-                document.getElementById('input-file-oficio').focus();
-                return false;
-            }
-            
-            if (fileCroqui === 0) {
-                e.preventDefault();
-                alert('Por favor, anexe o Croqui do Trajeto. Este documento é obrigatório.');
-                document.getElementById('input-file-croqui').focus();
-                return false;
-            }
-            
-            // Confirmação
-            if (!confirm(`Confirmar envio dos dados complementares para o protocolo ${protocolo}?\n\nOs dados serão vinculados ao protocolo informado.`)) {
-                e.preventDefault();
-                return false;
-            }
-            
-            return true;
-        });
+        alert('Relatório gerado com sucesso.\nArquivo pronto para abrir no Excel.');
+        this.reset();
+        verificarParticipantes();
+        document.getElementById('numero-protocolo-display').textContent = '_____';
+    });
 
-        // Função para resetar formulário completamente
-        function resetarFormulario() {
-            if (confirm('Deseja limpar todo o formulário? Todos os dados serão perdidos.')) {
-                // Esconder todas as seções exceto as primeiras
-                secoesOcultas.forEach(id => {
-                    const elemento = document.getElementById(id);
-                    if (elemento) {
-                        elemento.style.display = 'none';
-                        elemento.classList.add('hidden-section');
-                    }
-                });
-                
-                // Mostrar mensagem inicial
-                mensagemInicial.style.display = 'block';
-                
-                // Resetar o formulário (isso limpa os valores)
-                document.getElementById('formInterdicao').reset();
-                
-                // Resetar o display do protocolo
-                document.getElementById('numero-protocolo-display').textContent = '_____';
-                
-                // Focar no primeiro campo
-                document.getElementById('input-protocolo').focus();
-            }
-        }
-
-        // Configuração inicial
-        document.addEventListener('DOMContentLoaded', function() {
-            // Focar no campo do protocolo
-            document.getElementById('input-protocolo').focus();
-            
-            // Verificar se já tem participantes preenchidos (em caso de refresh)
-            verificarParticipantes();
-        });
-    </script>
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    document.addEventListener('DOMContentLoaded', () => {
+        verificarParticipantes();
+    });
+</script>
 </body>
+
 </html>
