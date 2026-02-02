@@ -15,27 +15,30 @@ body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; }
 .section-title { color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
 .logo-header { max-height: 70px; margin-right: 15px; }
 .protocolo-info { background: #e7f3ff; border-left: 4px solid var(--primary); padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+.hidden-section { display: none; }
+.section-divider { border-top: 2px dashed #dee2e6; margin: 2rem 0; padding-top: 2rem; }
 </style>
 </head>
 <body>
+
 <div class="header">
-    <div class="container">
-        <div class="d-flex align-items-center justify-content-center">
-            <img src="logo-horizontal.png" alt="Logo SMU Juiz de Fora" class="logo-header">
-            <div class="text-center">
-                <h1 class="mb-1" style="font-size: 1.8rem;">SMU Juiz de Fora</h1>
-                <p class="mb-0" style="font-size: 0.9rem;">Secretaria Municipal de Urbanismo</p>
-                <p class="mb-0"><small>Complemento de Dados para Interdição</small></p>
-            </div>
-        </div>
-    </div>
+<div class="container">
+<div class="d-flex align-items-center justify-content-center">
+<img src="logo-horizontal.png" alt="Logo SMU" class="logo-header">
+<div class="text-center">
+<h1 class="mb-1" style="font-size:1.8rem;">SMU Juiz de Fora</h1>
+<p class="mb-0" style="font-size:0.9rem;">Secretaria Municipal de Urbanismo</p>
+<p class="mb-0"><small>Complemento de Dados para Interdição</small></p>
+</div>
+</div>
+</div>
 </div>
 
 <div class="container py-4">
 <form id="formInterdicao" enctype="multipart/form-data">
 <div class="protocolo-info">
 <h5><i class="bi bi-info-circle"></i> Informação Importante</h5>
-<p class="mb-0">Este formulário é para complementar dados de uma solicitação já existente. Você deve ter o <strong>número do protocolo</strong>.</p>
+<p>Preencha os dados de uma solicitação já existente, informando o <strong>número do protocolo</strong>.</p>
 </div>
 
 <div class="form-section">
@@ -44,12 +47,10 @@ body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; }
 <div class="col-md-6 mb-3">
 <label class="form-label required">Número do Protocolo SMU</label>
 <input type="text" class="form-control" name="numero_protocolo" required placeholder="Digite o número do protocolo" id="input-protocolo">
-<small class="text-muted">Ex: SMU-20231201-00123</small>
 </div>
 <div class="col-md-6 mb-3">
 <label class="form-label">Data do Protocolo</label>
 <input type="date" class="form-control" name="data_protocolo">
-<small class="text-muted">Data em que o protocolo foi gerado (opcional)</small>
 </div>
 </div>
 </div>
@@ -62,8 +63,8 @@ body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; }
 <input type="text" class="form-control" name="nome_responsavel" required>
 </div>
 <div class="col-md-6 mb-3">
-<label class="form-label required">Telefone para Contato</label>
-<input type="tel" class="form-control" name="telefone" required placeholder="(32) 99999-9999">
+<label class="form-label required">Telefone</label>
+<input type="tel" class="form-control" name="telefone" placeholder="(32) 99999-9999" required>
 </div>
 </div>
 </div>
@@ -107,88 +108,6 @@ body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; }
 </div>
 
 <div class="form-section">
-<h3 class="section-title">4. Período do Evento</h3>
-<div class="row">
-<div class="col-md-4 mb-3">
-<label class="form-label required">Data do Evento</label>
-<input type="date" class="form-control" name="data_evento" required>
-</div>
-<div class="col-md-4 mb-3">
-<label class="form-label required">Hora Início</label>
-<input type="time" class="form-control" name="hora_inicio" required>
-</div>
-<div class="col-md-4 mb-3">
-<label class="form-label required">Hora Término</label>
-<input type="time" class="form-control" name="hora_termino" required>
-</div>
-</div>
-</div>
-
-<div class="form-section">
-<h3 class="section-title">5. Local do Evento</h3>
-<div class="row">
-<div class="col-md-8 mb-3">
-<label class="form-label required">Endereço do Evento</label>
-<input type="text" class="form-control" name="endereco_evento" required placeholder="Rua, número, bairro">
-</div>
-<div class="col-md-4 mb-3">
-<label class="form-label">Ponto de Referência</label>
-<input type="text" class="form-control" name="referencia" placeholder="Próximo a...">
-</div>
-</div>
-</div>
-
-<div class="form-section">
-<h3 class="section-title">6. Detalhes da Interdição</h3>
-<div class="row">
-<div class="col-md-12 mb-3">
-<label class="form-label required">Ruas/Trechos a Interditar</label>
-<textarea class="form-control" name="ruas_interditadas" rows="3" required></textarea>
-</div>
-<div class="col-md-4 mb-3">
-<label class="form-label required">Data da Interdição</label>
-<input type="date" class="form-control" name="data_interdicao" required>
-</div>
-<div class="col-md-4 mb-3">
-<label class="form-label required">Hora Início da Interdição</label>
-<input type="time" class="form-control" name="hora_interdicao_inicio" required>
-</div>
-<div class="col-md-4 mb-3">
-<label class="form-label required">Hora Término da Interdição</label>
-<input type="time" class="form-control" name="hora_interdicao_termino" required>
-</div>
-<div class="col-md-12 mb-3">
-<div class="form-check">
-<input class="form-check-input" type="checkbox" name="interdicao_parcial">
-<label class="form-check-label">Interdição Parcial (apenas uma faixa/pista)</label>
-</div>
-</div>
-</div>
-</div>
-
-<div class="form-section">
-<h3 class="section-title">7. Sinalização Necessária</h3>
-<div class="row">
-<div class="col-md-3 mb-3">
-<label class="form-label">Cones</label>
-<input type="number" class="form-control" name="qtd_cones" min="0" value="0">
-</div>
-<div class="col-md-3 mb-3">
-<label class="form-label">Cavaletes</label>
-<input type="number" class="form-control" name="qtd_cavaletes" min="0" value="0">
-</div>
-<div class="col-md-3 mb-3">
-<label class="form-label">Fita Zebrada (metros)</label>
-<input type="number" class="form-control" name="metros_fita" min="0" value="0">
-</div>
-<div class="col-md-3 mb-3">
-<label class="form-label">Outros</label>
-<input type="text" class="form-control" name="outros_sinalizacao">
-</div>
-</div>
-</div>
-
-<div class="form-section">
 <h3 class="section-title">10. Anexos</h3>
 <div class="row">
 <div class="col-md-4 mb-3">
@@ -206,25 +125,40 @@ body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; }
 </div>
 </div>
 
-<div class="form-section text-center">
-<button type="submit" class="btn btn-primary btn-lg px-5"><i class="bi bi-send"></i> Enviar Dados Complementares</button>
-<button type="reset" class="btn btn-secondary btn-lg px-5 ms-2">Limpar</button>
+<div class="text-center mt-4">
+<button type="submit" class="btn btn-primary btn-lg">Enviar Solicitação</button>
+<button type="reset" class="btn btn-secondary btn-lg">Limpar</button>
 </div>
+
 </form>
 </div>
 
 <script>
 const form = document.getElementById('formInterdicao');
-form.addEventListener('submit', async e => {
-e.preventDefault();
-const formData = new FormData(form);
-try{
-const res = await fetch('/enviar', {method:'POST', body: formData});
-const data = await res.json();
-if(data.ok){ alert('Solicitação enviada com sucesso!'); form.reset(); }
-else{ alert('Erro ao enviar dados: '+data.msg); }
-}catch(err){ console.error(err); alert('Erro na requisição: '+err.message); }
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
+
+  try {
+    const res = await fetch('http://localhost:3000/solicitacoes', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (data.ok) {
+      alert('Solicitação enviada com sucesso!');
+      console.log(data.dados);
+      form.reset();
+    } else {
+      alert('Erro ao enviar dados');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Erro na requisição');
+  }
 });
 </script>
+
 </body>
 </html>
