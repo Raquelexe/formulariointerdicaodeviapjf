@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solicitação de Interdição - SMU JF</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root { --primary: #0066cc; --secondary: #003366; }
         body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; }
@@ -17,10 +16,6 @@
         .protocolo-info { background: #e7f3ff; border-left: 4px solid var(--primary); padding: 15px; border-radius: 5px; margin-bottom: 20px; }
         .hidden-section { display: none; }
         .section-divider { border-top: 2px dashed #dee2e6; margin: 2rem 0; padding-top: 2rem; }
-        .btn-confirmar { margin-top: 10px; }
-        .participantes-confirmados { background: #e7f7e7; border: 2px solid #28a745; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-        .google-forms-warning { background: #fff3cd; border: 2px solid #ffc107; padding: 20px; border-radius: 10px; margin: 20px 0; }
-        .preview-container { max-height: 400px; overflow-y: auto; border: 1px solid #dee2e6; padding: 15px; border-radius: 5px; background: #f8f9fa; }
         @media (max-width: 768px) {
             .logo-header { max-height: 50px; margin-right: 10px; }
             .header { padding: 1rem 0; }
@@ -28,6 +23,7 @@
     </style>
 </head>
 <body>
+    <!-- Cabeçalho com Logo -->
     <div class="header">
         <div class="container">
             <div class="d-flex align-items-center justify-content-center">
@@ -36,7 +32,7 @@
                      class="logo-header">
                 <div class="text-center">
                     <h1 class="mb-1" style="font-size: 1.8rem;">SMU Juiz de Fora</h1>
-                    <p class="mb-0" style="font-size: 0.9rem;">Secretaria de Mobilidade Urbana</p>
+                    <p class="mb-0" style="font-size: 0.9rem;">Secretaria Municipal de Urbanismo</p>
                     <p class="mb-0"><small>Complemento de Dados para Interdição</small></p>
                 </div>
             </div>
@@ -44,12 +40,16 @@
     </div>
 
     <div class="container py-4">
-        <div id="formInterdicao">
+        <form id="formInterdicao" method="POST" netlify enctype="multipart/form-data">
+            
+            <!-- INFORMAÇÃO SOBRE O PROTOCOLO -->
             <div class="protocolo-info">
                 <h5><i class="bi bi-info-circle"></i> Informação Importante</h5>
-<p class="mb-0"><small>Instuções: gere um pdf com as informações do presente formulário e anexe no google forms</small></p>
+                <p class="mb-0">Este formulário é para complementar dados de uma solicitação já existente. 
+                Você deve ter o <strong>número do protocolo</strong> gerado pelo sistema principal do SMU.</p>
             </div>
 
+            <!-- SEÇÃO 1: PROTOCOLO -->
             <div class="form-section">
                 <h3 class="section-title">1. Número do Protocolo</h3>
                 <div class="row">
@@ -62,12 +62,13 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Data do Protocolo</label>
-                        <input type="date" class="form-control" name="data_protocolo" id="input-data-protocolo">
+                        <input type="date" class="form-control" name="data_protocolo">
                         <small class="text-muted">Data em que o protocolo foi gerado (opcional)</small>
                     </div>
                 </div>
             </div>
 
+            <!-- SEÇÃO 2: DADOS DO RESPONSÁVEL -->
             <div class="form-section">
                 <h3 class="section-title">2. Dados do Responsável</h3>
                 <div class="row">
@@ -82,15 +83,10 @@
                                placeholder="(32) 99999-9999"
                                id="input-telefone">
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label required">E-mail para Contato</label>
-                        <input type="email" class="form-control" name="email" required 
-                               placeholder="seu@email.com"
-                               id="input-email">
-                    </div>
                 </div>
             </div>
 
+            <!-- SEÇÃO 3: DADOS BÁSICOS DO EVENTO -->
             <div class="form-section">
                 <h3 class="section-title">3. Dados Básicos do Evento</h3>
                 <div class="row">
@@ -116,19 +112,12 @@
                             <option value="outro">Outro</option>
                         </select>
                     </div>
-                    
                     <div class="col-md-6 mb-3">
                         <label class="form-label required">Número de Participantes</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="participantes" min="1" required
-                                   id="input-participantes" value="0">
-                            <button type="button" class="btn btn-primary" id="btn-confirmar-participantes">
-                                <i class="bi bi-check-circle"></i> Confirmar
-                            </button>
-                        </div>
-                        <small class="text-muted">Informe e confirme o número de participantes para continuar</small>
+                        <input type="number" class="form-control" name="participantes" min="1" required
+                               id="input-participantes">
+                        <small class="text-muted">Preencha este campo para continuar</small>
                     </div>
-                    
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Público Esperado</label>
                         <input type="number" class="form-control" name="publico_esperado" min="0"
@@ -140,20 +129,9 @@
                                   id="textarea-descricao-evento"></textarea>
                     </div>
                 </div>
-                
-                <div id="participantes-confirmados-box" class="participantes-confirmados hidden-section">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="text-success mb-1"><i class="bi bi-check-circle-fill"></i> Número de participantes confirmado</h5>
-                            <p class="mb-0">Participantes confirmados: <strong id="numero-participantes-display">0</strong></p>
-                        </div>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-alterar-participantes">
-                            <i class="bi bi-pencil"></i> Alterar
-                        </button>
-                    </div>
-                </div>
             </div>
 
+            <!-- DIVISÓRIA - Só aparece depois de preencher participantes -->
             <div id="divisor-secoes" class="hidden-section">
                 <div class="section-divider">
                     <h4 class="text-center text-primary">Detalhes da Interdição</h4>
@@ -161,6 +139,7 @@
                 </div>
             </div>
 
+            <!-- SEÇÃO 4: PERÍODO DO EVENTO (oculta inicialmente) -->
             <div id="secao-periodo" class="form-section hidden-section">
                 <h3 class="section-title">4. Período do Evento</h3>
                 <div class="row">
@@ -182,6 +161,7 @@
                 </div>
             </div>
 
+            <!-- SEÇÃO 5: LOCAL DO EVENTO (oculta inicialmente) -->
             <div id="secao-local" class="form-section hidden-section">
                 <h3 class="section-title">5. Local do Evento</h3>
                 <div class="row">
@@ -200,6 +180,7 @@
                 </div>
             </div>
 
+            <!-- SEÇÃO 6: DETALHES DA INTERDIÇÃO (oculta inicialmente) -->
             <div id="secao-interdicao" class="form-section hidden-section">
                 <h3 class="section-title">6. Detalhes da Interdição</h3>
                 <div class="row">
@@ -235,9 +216,9 @@
                 </div>
             </div>
 
+            <!-- SEÇÃO 7: SINALIZAÇÃO (oculta inicialmente) -->
             <div id="secao-sinalizacao" class="form-section hidden-section">
-                <p> §1º CTB: "A responsabilidade pela sinalização é do responsável pela execução ou manutenção da obra ou evento."</p>
-                <h3 class="section-title">7. Sinalização que possui</h3>
+                <h3 class="section-title">7. Sinalização Necessária</h3>
                 <div class="row">
                     <div class="col-md-3 mb-3">
                         <label class="form-label">Cones</label>
@@ -263,6 +244,7 @@
                 </div>
             </div>
 
+            <!-- SEÇÃO 8: AGENTES DE TRÂNSITO (oculta inicialmente) -->
             <div id="secao-agentes" class="form-section hidden-section">
                 <h3 class="section-title">8. Agentes de Trânsito</h3>
                 <div class="row">
@@ -280,6 +262,7 @@
                 </div>
             </div>
 
+            <!-- SEÇÃO 9: VEÍCULOS (oculta inicialmente) -->
             <div id="secao-veiculos" class="form-section hidden-section">
                 <h3 class="section-title">9. Veículos</h3>
                 <div class="row">
@@ -297,15 +280,32 @@
                 </div>
             </div>
 
+            <!-- SEÇÃO 10: ANEXOS (oculta inicialmente) -->
             <div id="secao-anexos" class="form-section hidden-section">
                 <h3 class="section-title">10. Anexos (opcional)</h3>
-                
-                <div class="google-forms-warning">
-                    <h5><i class="bi bi-file-earmark-pdf"></i> Documentação Complementar</h5>
-                    <p>Você pode anexar documentos complementares. Todos os dados principais serão gerados em um PDF.</p>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Ofício/Baixo-assinado</label>
+                        <input type="file" class="form-control" name="file_oficio" accept=".pdf,.jpg,.png"
+                               id="input-file-oficio">
+                        <small class="text-muted">Documento com aprovação</small>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Croqui do Trajeto</label>
+                        <input type="file" class="form-control" name="file_croqui" accept=".pdf,.jpg,.png"
+                               id="input-file-croqui">
+                        <small class="text-muted">Mapa/croqui da área</small>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">CRLVs dos Veículos</label>
+                        <input type="file" class="form-control" name="file_crlv[]" multiple accept=".pdf,.jpg,.png"
+                               id="input-file-crlv">
+                        <small class="text-muted">Documentos dos veículos</small>
+                    </div>
                 </div>
-                
             </div>
+
+            <!-- SEÇÃO 11: OBSERVAÇÕES FINAIS (oculta inicialmente) -->
             <div id="secao-observacoes" class="form-section hidden-section">
                 <h3 class="section-title">11. Observações Finais</h3>
                 <div class="row">
@@ -320,48 +320,36 @@
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="declaracao" required>
                             <label class="form-check-label" for="declaracao">
-                                Declaro que as informações fornecidas são verdadeiras e complementam a solicitação de protocolo nº <span id="numero-protocolo-display">_____</span>.
+                                Declaro que as informações fornecidas são verdadeiras e complementam a solicitação de protocolo nº <span id="numero-protocolo-display">_____</span>
                             </label>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- BOTÃO DE ENVIO (oculto inicialmente) -->
             <div id="div-botoes" class="text-center mt-4 hidden-section">
-                <button type="button" class="btn btn-primary btn-lg px-5" id="btn-gerar-pdf">
-                    <i class="bi bi-file-earmark-pdf"></i> Gerar PDF com Dados
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                    <i class="bi bi-send"></i> Enviar Dados Complementares
                 </button>
-                <button type="button" class="btn btn-success btn-lg px-5 ms-2" id="btn-abrir-google-forms">
-                    <i class="bi bi-google"></i> Ir para Google Forms
-                </button>
-                <button type="button" class="btn btn-secondary btn-lg px-5 ms-2" onclick="resetarFormulario()">
+                <button type="reset" class="btn btn-secondary btn-lg px-5 ms-2" onclick="resetarFormulario()">
                     <i class="bi bi-eraser"></i> Limpar
                 </button>
             </div>
 
-            <div id="preview-section" class="form-section hidden-section">
-                <h3 class="section-title">Pré-visualização do Documento</h3>
-                <div class="preview-container" id="pdf-preview">
-                </div>
-                <div class="text-center mt-3">
-                    <button type="button" class="btn btn-primary" id="btn-baixar-pdf">
-                        <i class="bi bi-download"></i> Baixar PDF
-                    </button>
-                    <button type="button" class="btn btn-success ms-2" id="btn-enviar-completo">
-                        <i class="bi bi-send"></i> Enviar Documento Completo
-                    </button>
-                </div>
-            </div>
-
+            <!-- MENSAGEM INSTRUTIVA (visível inicialmente) -->
             <div id="mensagem-inicial" class="text-center mt-4">
                 <div class="alert alert-info">
-                    <h5><i class="bi bi-arrow-down"></i> Confirme o número de participantes</h5>
-                    <p class="mb-0">Informe o número de participantes na Seção 3 e clique em "Confirmar" para habilitar as demais seções do formulário.</p>
+                    <h5><i class="bi bi-arrow-down"></i> Preencha os dados básicos acima</h5>
+                    <p class="mb-0">Complete as informações da Seção 3 (número de participantes) para habilitar as demais seções do formulário.</p>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
+
+    <!-- JavaScript -->
     <script>
+        // Array com IDs de todas as seções que serão mostradas depois
         const secoesOcultas = [
             'divisor-secoes',
             'secao-periodo',
@@ -375,191 +363,104 @@
             'div-botoes'
         ];
 
-        // Elementos importantes
+        // Elementos que serão monitorados
         const inputParticipantes = document.getElementById('input-participantes');
-        const btnConfirmar = document.getElementById('btn-confirmar-participantes');
-        const participantesConfirmadosBox = document.getElementById('participantes-confirmados-box');
-        const numeroParticipantesDisplay = document.getElementById('numero-participantes-display');
-        const btnAlterarParticipantes = document.getElementById('btn-alterar-participantes');
-        const btnGerarPDF = document.getElementById('btn-gerar-pdf');
-        const btnAbrirGoogleForms = document.getElementById('btn-abrir-google-forms');
-        const btnBaixarPDF = document.getElementById('btn-baixar-pdf');
-        const btnEnviarCompleto = document.getElementById('btn-enviar-completo');
         const mensagemInicial = document.getElementById('mensagem-inicial');
-        const pdfPreview = document.getElementById('pdf-preview');
-        const previewSection = document.getElementById('preview-section');
-        
-        let participantesConfirmados = false;
-        let pdfDoc = null;
-        let dadosFormulario = {};
 
-        function confirmarParticipantes() {
+        // Função para verificar se pode mostrar as seções
+        function verificarParticipantes() {
             const participantes = parseInt(inputParticipantes.value);
             
-            if (participantes < 1) {
-                alert('Por favor, informe um número de participantes válido (mínimo 1).');
-                inputParticipantes.focus();
-                return;
+            if (participantes >= 1) {
+                // Esconder mensagem inicial
+                mensagemInicial.style.display = 'none';
+                
+                // Mostrar todas as seções ocultas
+                secoesOcultas.forEach(id => {
+                    const elemento = document.getElementById(id);
+                    if (elemento) {
+                        elemento.style.display = 'block';
+                        elemento.classList.remove('hidden-section');
+                    }
+                });
+                
+                // Configurar datas mínimas
+                const hoje = new Date().toISOString().split('T')[0];
+                document.getElementById('input-data-evento').min = hoje;
+                document.getElementById('input-data-interdicao').min = hoje;
+                
+                // Rolar suavemente para a primeira seção mostrada
+                document.getElementById('divisor-secoes').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+                
+            } else {
+                // Esconder todas as seções
+                secoesOcultas.forEach(id => {
+                    const elemento = document.getElementById(id);
+                    if (elemento) {
+                        elemento.style.display = 'none';
+                        elemento.classList.add('hidden-section');
+                    }
+                });
+                
+                // Mostrar mensagem inicial
+                mensagemInicial.style.display = 'block';
             }
-            
-            participantesConfirmados = true;
-            numeroParticipantesDisplay.textContent = participantes;
-            participantesConfirmadosBox.style.display = 'block';
-            participantesConfirmadosBox.classList.remove('hidden-section');
-            
-            mensagemInicial.style.display = 'none';
-            
-            secoesOcultas.forEach(id => {
-                const elemento = document.getElementById(id);
-                if (elemento) {
-                    elemento.style.display = 'block';
-                    elemento.classList.remove('hidden-section');
-                }
-            });
-            
-            inputParticipantes.disabled = true;
-            btnConfirmar.disabled = true;
-            
-            const hoje = new Date().toISOString().split('T')[0];
-            document.getElementById('input-data-evento').min = hoje;
-            document.getElementById('input-data-interdicao').min = hoje;
-            
-            document.getElementById('divisor-secoes').scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start' 
-            });
         }
 
-        function permitirAlteracaoParticipantes() {
-            participantesConfirmados = false;
-            participantesConfirmadosBox.style.display = 'none';
-            participantesConfirmadosBox.classList.add('hidden-section');
-            
-            secoesOcultas.forEach(id => {
-                const elemento = document.getElementById(id);
-                if (elemento) {
-                    elemento.style.display = 'none';
-                    elemento.classList.add('hidden-section');
-                }
-            });
-            
-            previewSection.style.display = 'none';
-            previewSection.classList.add('hidden-section');
-            
-            mensagemInicial.style.display = 'block';
-            
-            inputParticipantes.disabled = false;
-            btnConfirmar.disabled = false;
-            inputParticipantes.focus();
-            inputParticipantes.select();
-            inputParticipantes.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
+        // Atualizar número do protocolo na declaração
         document.getElementById('input-protocolo').addEventListener('input', function(e) {
             const protocolo = e.target.value;
             document.getElementById('numero-protocolo-display').textContent = protocolo || '_____';
         });
 
-        btnConfirmar.addEventListener('click', confirmarParticipantes);
-        btnAlterarParticipantes.addEventListener('click', permitirAlteracaoParticipantes);
-        inputParticipantes.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                confirmarParticipantes();
-            }
-        });
+        // Monitorar alteração no campo de participantes
+        inputParticipantes.addEventListener('input', verificarParticipantes);
+        inputParticipantes.addEventListener('change', verificarParticipantes);
 
-        function coletarDadosFormulario() {
-            dadosFormulario = {
-                protocolo: document.getElementById('input-protocolo').value || 'Não informado',
-                dataProtocolo: document.getElementById('input-data-protocolo').value || 'Não informada',
-                nomeResponsavel: document.getElementById('input-nome-responsavel').value || 'Não informado',
-                telefone: document.getElementById('input-telefone').value || 'Não informado',
-                email: document.getElementById('input-email').value || 'Não informado',
-                
-                nomeEvento: document.getElementById('input-nome-evento').value || 'Não informado',
-                tipoEvento: document.getElementById('select-tipo-evento').value || 'Não informado',
-                participantes: document.getElementById('input-participantes').value || '0',
-                publicoEsperado: document.getElementById('input-publico-esperado').value || 'Não informado',
-                descricaoEvento: document.getElementById('textarea-descricao-evento').value || 'Não informada',
-                
-                dataEvento: document.getElementById('input-data-evento').value || 'Não informada',
-                horaInicio: document.getElementById('input-hora-inicio').value || 'Não informada',
-                horaTermino: document.getElementById('input-hora-termino').value || 'Não informada',
-                
-                enderecoEvento: document.getElementById('input-endereco-evento').value || 'Não informado',
-                referencia: document.getElementById('input-referencia').value || 'Não informada',
-                
-                ruasInterditadas: document.getElementById('textarea-ruas-interditadas').value || 'Não informado',
-                dataInterdicao: document.getElementById('input-data-interdicao').value || 'Não informada',
-                horaInterdicaoInicio: document.getElementById('input-hora-interdicao-inicio').value || 'Não informada',
-                horaInterdicaoTermino: document.getElementById('input-hora-interdicao-termino').value || 'Não informada',
-                interdicaoParcial: document.getElementById('interdicao_parcial').checked ? 'Sim' : 'Não',
-
-                qtdCones: document.getElementById('input-qtd-cones').value || '0',
-                qtdCavaletes: document.getElementById('input-qtd-cavaletes').value || '0',
-                metrosFita: document.getElementById('input-metros-fita').value || '0',
-                outrosSinalizacao: document.getElementById('input-outros-sinalizacao').value || 'Nenhum',
-                
-                qtdAgentes: document.getElementById('input-qtd-agentes').value || '0',
-                obsAgentes: document.getElementById('textarea-obs-agentes').value || 'Nenhuma',
-                
-                qtdVeiculos: document.getElementById('input-qtd-veiculos').value || '0',
-                tipoVeiculos: document.getElementById('input-tipo-veiculos').value || 'Nenhum',
-                
-                observacoes: document.getElementById('textarea-observacoes').value || 'Nenhuma',
-                
-                timestamp: new Date().toLocaleString('pt-BR'),
-                dataEnvio: new Date().toLocaleDateString('pt-BR'),
-                horaEnvio: new Date().toLocaleTimeString('pt-BR')
-            };
-            
-            return dadosFormulario;
-        }
-
-        function validarFormulario() {
-            if (!participantesConfirmados) {
-                alert('Por favor, confirme o número de participantes antes de continuar.');
-                inputParticipantes.focus();
-                return false;
-            }
-
+        // Validações do formulário
+        document.getElementById('formInterdicao').addEventListener('submit', function(e) {
+            // Validar protocolo
             const protocolo = document.getElementById('input-protocolo').value.trim();
             if (!protocolo) {
+                e.preventDefault();
                 alert('Por favor, informe o número do protocolo.');
                 return false;
             }
 
+            // Validar participantes
             const participantes = parseInt(inputParticipantes.value);
             if (participantes < 1) {
+                e.preventDefault();
                 alert('O número de participantes deve ser pelo menos 1.');
                 return false;
             }
 
-            const email = document.getElementById('input-email').value;
-            if (!email || !email.includes('@')) {
-                alert('Por favor, informe um e-mail válido.');
-                return false;
-            }
-
+            // Validar datas
             const dataEvento = document.getElementById('input-data-evento').value;
             const dataInterdicao = document.getElementById('input-data-interdicao').value;
             const hoje = new Date().toISOString().split('T')[0];
             
             if (dataEvento < hoje) {
+                e.preventDefault();
                 alert('A data do evento não pode ser anterior à hoje.');
                 return false;
             }
             
             if (dataInterdicao < hoje) {
+                e.preventDefault();
                 alert('A data da interdição não pode ser anterior à hoje.');
                 return false;
             }
             
+            // Validar horários
             const horaInicio = document.getElementById('input-hora-inicio').value;
             const horaTermino = document.getElementById('input-hora-termino').value;
             
             if (horaInicio >= horaTermino) {
+                e.preventDefault();
                 alert('A hora de término do evento deve ser posterior à hora de início.');
                 return false;
             }
@@ -568,430 +469,23 @@
             const horaInterdicaoTermino = document.getElementById('input-hora-interdicao-termino').value;
             
             if (horaInterdicaoInicio >= horaInterdicaoTermino) {
+                e.preventDefault();
                 alert('A hora de término da interdição deve ser posterior à hora de início.');
                 return false;
             }
             
+            // Confirmação
+            if (!confirm(`Confirmar envio dos dados complementares para o protocolo ${protocolo}?\n\nOs dados serão vinculados ao protocolo informado.`)) {
+                e.preventDefault();
+                return false;
+            }
+            
             return true;
-        }
-
-        // Função para gerar PDF
-        async function gerarPDF() {
-            if (!validarFormulario()) {
-                return;
-            }
-            
-            coletarDadosFormulario();
-            
-            // Mostrar loading
-            btnGerarPDF.innerHTML = '<i class="bi bi-hourglass-split"></i> Gerando PDF...';
-            btnGerarPDF.disabled = true;
-            
-            try {
-                // Criar PDF
-                const { jsPDF } = window.jspdf;
-                pdfDoc = new jsPDF();
-                
-                // Configurações
-                const margin = 15;
-                let y = margin;
-                const pageWidth = pdfDoc.internal.pageSize.getWidth();
-                const pageHeight = pdfDoc.internal.pageSize.getHeight();
-                
-                // Cabeçalho
-                pdfDoc.setFontSize(16);
-                pdfDoc.setTextColor(0, 102, 204); // Azul SMU
-                pdfDoc.text("SECRETARIA DE MOBILIDADE URBANA - SMU", pageWidth / 2, y, { align: 'center' });
-                y += 8;
-                pdfDoc.setFontSize(14);
-                pdfDoc.text("PREFEITURA DE JUIZ DE FORA", pageWidth / 2, y, { align: 'center' });
-                y += 8;
-                pdfDoc.setFontSize(12);
-                pdfDoc.setTextColor(0, 0, 0);
-                pdfDoc.text("COMPLEMENTO DE DADOS PARA INTERDIÇÃO", pageWidth / 2, y, { align: 'center' });
-                y += 15;
-                
-                // Linha separadora
-                pdfDoc.setLineWidth(0.5);
-                pdfDoc.line(margin, y, pageWidth - margin, y);
-                y += 10;
-                
-                // Protocolo
-                pdfDoc.setFontSize(11);
-                pdfDoc.setFont(undefined, 'bold');
-                pdfDoc.text("PROTOCOLO: ", margin, y);
-                pdfDoc.setFont(undefined, 'normal');
-                pdfDoc.text(dadosFormulario.protocolo, margin + 30, y);
-                y += 7;
-                pdfDoc.setFont(undefined, 'bold');
-                pdfDoc.text("DATA DO PROTOCOLO: ", margin, y);
-                pdfDoc.setFont(undefined, 'normal');
-                pdfDoc.text(dadosFormulario.dataProtocolo, margin + 50, y);
-                y += 7;
-                pdfDoc.setFont(undefined, 'bold');
-                pdfDoc.text("DATA DE ENVIO: ", margin, y);
-                pdfDoc.setFont(undefined, 'normal');
-                pdfDoc.text(dadosFormulario.timestamp, margin + 40, y);
-                y += 10;
-                
-                // Responsável
-                pdfDoc.setFont(undefined, 'bold');
-                pdfDoc.text("DADOS DO RESPONSÁVEL", margin, y);
-                y += 7;
-                pdfDoc.setFont(undefined, 'normal');
-                pdfDoc.text(`Nome: ${dadosFormulario.nomeResponsavel}`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`Telefone: ${dadosFormulario.telefone}`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`E-mail: ${dadosFormulario.email}`, margin + 5, y);
-                y += 10;
-                
-                // Evento
-                pdfDoc.setFont(undefined, 'bold');
-                pdfDoc.text("DADOS DO EVENTO", margin, y);
-                y += 7;
-                pdfDoc.setFont(undefined, 'normal');
-                pdfDoc.text(`Nome: ${dadosFormulario.nomeEvento}`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`Tipo: ${dadosFormulario.tipoEvento}`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`Participantes: ${dadosFormulario.participantes}`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`Público Esperado: ${dadosFormulario.publicoEsperado}`, margin + 5, y);
-                y += 5;
-                
-                // Descrição do evento (com quebra de linha)
-                const descricaoLines = pdfDoc.splitTextToSize(`Descrição: ${dadosFormulario.descricaoEvento}`, pageWidth - 2 * margin - 10);
-                pdfDoc.text(descricaoLines, margin + 5, y);
-                y += descricaoLines.length * 5;
-                y += 5;
-                
-                // Período
-                pdfDoc.setFont(undefined, 'bold');
-                pdfDoc.text("PERÍODO DO EVENTO", margin, y);
-                y += 7;
-                pdfDoc.setFont(undefined, 'normal');
-                pdfDoc.text(`Data: ${dadosFormulario.dataEvento}`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`Horário: ${dadosFormulario.horaInicio} às ${dadosFormulario.horaTermino}`, margin + 5, y);
-                y += 10;
-                
-                // Local
-                pdfDoc.setFont(undefined, 'bold');
-                pdfDoc.text("LOCAL DO EVENTO", margin, y);
-                y += 7;
-                pdfDoc.setFont(undefined, 'normal');
-                pdfDoc.text(`Endereço: ${dadosFormulario.enderecoEvento}`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`Referência: ${dadosFormulario.referencia}`, margin + 5, y);
-                y += 10;
-                
-                // Interdição
-                pdfDoc.setFont(undefined, 'bold');
-                pdfDoc.text("DETALHES DA INTERDIÇÃO", margin, y);
-                y += 7;
-                pdfDoc.setFont(undefined, 'normal');
-                
-                // Ruas interditadas (com quebra de linha)
-                const ruasLines = pdfDoc.splitTextToSize(`Ruas/Trechos: ${dadosFormulario.ruasInterditadas}`, pageWidth - 2 * margin - 10);
-                pdfDoc.text(ruasLines, margin + 5, y);
-                y += ruasLines.length * 5;
-                
-                pdfDoc.text(`Data da Interdição: ${dadosFormulario.dataInterdicao}`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`Horário: ${dadosFormulario.horaInterdicaoInicio} às ${dadosFormulario.horaInterdicaoTermino}`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`Interdição Parcial: ${dadosFormulario.interdicaoParcial}`, margin + 5, y);
-                y += 10;
-                
-                // Sinalização
-                pdfDoc.setFont(undefined, 'bold');
-                pdfDoc.text("SINALIZAÇÃO DISPONÍVEL", margin, y);
-                y += 7;
-                pdfDoc.setFont(undefined, 'normal');
-                pdfDoc.text(`Cones: ${dadosFormulario.qtdCones}`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`Cavaletes: ${dadosFormulario.qtdCavaletes}`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`Fita Zebrada: ${dadosFormulario.metrosFita} metros`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`Outros: ${dadosFormulario.outrosSinalizacao}`, margin + 5, y);
-                y += 10;
-                
-                // Agentes
-                pdfDoc.setFont(undefined, 'bold');
-                pdfDoc.text("AGENTES DE TRÂNSITO", margin, y);
-                y += 7;
-                pdfDoc.setFont(undefined, 'normal');
-                pdfDoc.text(`Quantidade: ${dadosFormulario.qtdAgentes}`, margin + 5, y);
-                y += 5;
-                
-                if (dadosFormulario.obsAgentes && dadosFormulario.obsAgentes !== 'Nenhuma') {
-                    const obsLines = pdfDoc.splitTextToSize(`Observações: ${dadosFormulario.obsAgentes}`, pageWidth - 2 * margin - 10);
-                    pdfDoc.text(obsLines, margin + 5, y);
-                    y += obsLines.length * 5;
-                }
-                y += 5;
-                
-                // Veículos
-                pdfDoc.setFont(undefined, 'bold');
-                pdfDoc.text("VEÍCULOS", margin, y);
-                y += 7;
-                pdfDoc.setFont(undefined, 'normal');
-                pdfDoc.text(`Quantidade: ${dadosFormulario.qtdVeiculos}`, margin + 5, y);
-                y += 5;
-                pdfDoc.text(`Tipo: ${dadosFormulario.tipoVeiculos}`, margin + 5, y);
-                y += 10;
-                
-                // Observações
-                if (dadosFormulario.observacoes && dadosFormulario.observacoes !== 'Nenhuma') {
-                    pdfDoc.setFont(undefined, 'bold');
-                    pdfDoc.text("OBSERVAÇÕES ADICIONAIS", margin, y);
-                    y += 7;
-                    pdfDoc.setFont(undefined, 'normal');
-                    const obsLines = pdfDoc.splitTextToSize(dadosFormulario.observacoes, pageWidth - 2 * margin - 10);
-                    pdfDoc.text(obsLines, margin + 5, y);
-                    y += obsLines.length * 5;
-                    y += 5;
-                }
-                
-                // Declaração
-                y += 5;
-                pdfDoc.setFont(undefined, 'italic');
-                pdfDoc.setFontSize(10);
-                const declaracao = `Declaro que as informações fornecidas são verdadeiras e complementam a solicitação de protocolo nº ${dadosFormulario.protocolo}.`;
-                const decLines = pdfDoc.splitTextToSize(declaracao, pageWidth - 2 * margin);
-                pdfDoc.text(decLines, margin, y);
-                y += decLines.length * 4;
-                
-                // Rodapé
-                y = pageHeight - 20;
-                pdfDoc.setFontSize(8);
-                pdfDoc.setTextColor(100, 100, 100);
-                pdfDoc.text("Documento gerado automaticamente pelo Sistema de Complemento de Dados - SMU Juiz de Fora", pageWidth / 2, y, { align: 'center' });
-                y += 4;
-                pdfDoc.text(`Gerado em: ${dadosFormulario.timestamp}`, pageWidth / 2, y, { align: 'center' });
-                
-                // Mostrar preview
-                mostrarPreviewPDF();
-                
-            } catch (error) {
-                console.error('Erro ao gerar PDF:', error);
-                alert('Erro ao gerar PDF. Por favor, tente novamente.');
-            } finally {
-                btnGerarPDF.innerHTML = '<i class="bi bi-file-earmark-pdf"></i> Gerar PDF com Dados';
-                btnGerarPDF.disabled = false;
-            }
-        }
-
-        // Função para mostrar preview do PDF
-        function mostrarPreviewPDF() {
-            // Gerar preview em HTML
-            let previewHTML = `
-                <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; background: white; border: 1px solid #ccc;">
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <h3 style="color: #0066cc; margin: 0;">SECRETARIA DE MOBILIDADE URBANA - SMU</h3>
-                        <h4 style="margin: 5px 0;">PREFEITURA DE JUIZ DE FORA</h4>
-                        <h5 style="margin: 5px 0; color: #333;">COMPLEMENTO DE DADOS PARA INTERDIÇÃO</h5>
-                    </div>
-                    <hr style="border: 1px solid #0066cc;">
-                    
-                    <div style="margin-bottom: 15px;">
-                        <p><strong>PROTOCOLO:</strong> ${dadosFormulario.protocolo}</p>
-                        <p><strong>DATA DO PROTOCOLO:</strong> ${dadosFormulario.dataProtocolo}</p>
-                        <p><strong>DATA DE ENVIO:</strong> ${dadosFormulario.timestamp}</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: #0066cc; border-bottom: 1px solid #eee; padding-bottom: 5px;">DADOS DO RESPONSÁVEL</h4>
-                        <p><strong>Nome:</strong> ${dadosFormulario.nomeResponsavel}</p>
-                        <p><strong>Telefone:</strong> ${dadosFormulario.telefone}</p>
-                        <p><strong>E-mail:</strong> ${dadosFormulario.email}</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: #0066cc; border-bottom: 1px solid #eee; padding-bottom: 5px;">DADOS DO EVENTO</h4>
-                        <p><strong>Nome:</strong> ${dadosFormulario.nomeEvento}</p>
-                        <p><strong>Tipo:</strong> ${dadosFormulario.tipoEvento}</p>
-                        <p><strong>Participantes:</strong> ${dadosFormulario.participantes}</p>
-                        <p><strong>Público Esperado:</strong> ${dadosFormulario.publicoEsperado}</p>
-                        <p><strong>Descrição:</strong> ${dadosFormulario.descricaoEvento}</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: #0066cc; border-bottom: 1px solid #eee; padding-bottom: 5px;">PERÍODO DO EVENTO</h4>
-                        <p><strong>Data:</strong> ${dadosFormulario.dataEvento}</p>
-                        <p><strong>Horário:</strong> ${dadosFormulario.horaInicio} às ${dadosFormulario.horaTermino}</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: #0066cc; border-bottom: 1px solid #eee; padding-bottom: 5px;">LOCAL DO EVENTO</h4>
-                        <p><strong>Endereço:</strong> ${dadosFormulario.enderecoEvento}</p>
-                        <p><strong>Referência:</strong> ${dadosFormulario.referencia}</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: #0066cc; border-bottom: 1px solid #eee; padding-bottom: 5px;">DETALHES DA INTERDIÇÃO</h4>
-                        <p><strong>Ruas/Trechos:</strong> ${dadosFormulario.ruasInterditadas}</p>
-                        <p><strong>Data da Interdição:</strong> ${dadosFormulario.dataInterdicao}</p>
-                        <p><strong>Horário:</strong> ${dadosFormulario.horaInterdicaoInicio} às ${dadosFormulario.horaInterdicaoTermino}</p>
-                        <p><strong>Interdição Parcial:</strong> ${dadosFormulario.interdicaoParcial}</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: #0066cc; border-bottom: 1px solid #eee; padding-bottom: 5px;">SINALIZAÇÃO DISPONÍVEL</h4>
-                        <p><strong>Cones:</strong> ${dadosFormulario.qtdCones}</p>
-                        <p><strong>Cavaletes:</strong> ${dadosFormulario.qtdCavaletes}</p>
-                        <p><strong>Fita Zebrada:</strong> ${dadosFormulario.metrosFita} metros</p>
-                        <p><strong>Outros:</strong> ${dadosFormulario.outrosSinalizacao}</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: #0066cc; border-bottom: 1px solid #eee; padding-bottom: 5px;">AGENTES DE TRÂNSITO</h4>
-                        <p><strong>Quantidade:</strong> ${dadosFormulario.qtdAgentes}</p>
-                        <p><strong>Observações:</strong> ${dadosFormulario.obsAgentes}</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: #0066cc; border-bottom: 1px solid #eee; padding-bottom: 5px;">VEÍCULOS</h4>
-                        <p><strong>Quantidade:</strong> ${dadosFormulario.qtdVeiculos}</p>
-                        <p><strong>Tipo:</strong> ${dadosFormulario.tipoVeiculos}</p>
-                    </div>
-                    
-                    ${dadosFormulario.observacoes && dadosFormulario.observacoes !== 'Nenhuma' ? `
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: #0066cc; border-bottom: 1px solid #eee; padding-bottom: 5px;">OBSERVAÇÕES ADICIONAIS</h4>
-                        <p>${dadosFormulario.observacoes}</p>
-                    </div>
-                    ` : ''}
-                    
-                    <div style="margin-top: 30px; padding: 15px; background: #f8f9fa; border-left: 4px solid #0066cc;">
-                        <p style="font-style: italic; margin: 0;">
-                            Declaro que as informações fornecidas são verdadeiras e complementam a solicitação de protocolo nº ${dadosFormulario.protocolo}.
-                        </p>
-                    </div>
-                    
-                    <div style="margin-top: 20px; text-align: center; font-size: 0.8em; color: #666;">
-                        <p>Documento gerado automaticamente pelo Sistema de Complemento de Dados - SMU Juiz de Fora</p>
-                        <p>Gerado em: ${dadosFormulario.timestamp}</p>
-                    </div>
-                </div>
-            `;
-            
-            pdfPreview.innerHTML = previewHTML;
-            previewSection.style.display = 'block';
-            previewSection.classList.remove('hidden-section');
-            
-            // Rolar para o preview
-            previewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        // Função para baixar PDF
-        function baixarPDF() {
-            if (!pdfDoc) {
-                alert('Por favor, gere o PDF primeiro.');
-                return;
-            }
-            
-            const nomeArquivo = `SMU_Complemento_${dadosFormulario.protocolo.replace(/\//g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
-            pdfDoc.save(nomeArquivo);
-        }
-
-        // Função para abrir Google Forms
-        function abrirGoogleForms() {
-            if (!validarFormulario()) {
-                return;
-            }
-            
-            const protocolo = document.getElementById('input-protocolo').value;
-            const confirmacao = `
-📋 PRÓXIMOS PASSOS:
-
-1. O Google Forms será aberto em uma nova aba
-2. Preencha os dados MANUALMENTE no Google Forms
-3. Use o PDF gerado como referência
-4. Anexe os documentos solicitados
-5. Clique em "Enviar"
-
-Protocolo: ${protocolo}
-
-Deseja abrir o Google Forms agora?
-            `;
-            
-            if (confirm(confirmacao)) {
-                window.open('https://docs.google.com/forms/d/e/1FAIpQLSecrCe2Xanm-Srq590wiOzNXaD_UwJAoTwCYukTIVUoMbFW0w/viewform', '_blank');
-            }
-        }
-
-        // Função para enviar documento completo
-        function enviarDocumentoCompleto() {
-            if (!pdfDoc) {
-                alert('Por favor, gere o PDF primeiro.');
-                return;
-            }
-            
-            const protocolo = document.getElementById('input-protocolo').value;
-            const email = document.getElementById('input-email').value;
-            
-            const mensagem = `
-📤 ENVIO DO DOCUMENTO COMPLETO
-
-Os seguintes itens serão enviados:
-1. PDF com todos os dados do formulário
-2. Instruções para completar o processo
-
-Email do solicitante: ${email}
-Protocolo: ${protocolo}
-
-Deseja continuar?
-            `;
-            
-            if (confirm(mensagem)) {
-                // Baixar o PDF
-                baixarPDF();
-                
-                // Mostrar instruções
-                alert(`
-✅ PDF BAIXADO COM SUCESSO!
-
-📋 PRÓXIMOS PASSOS:
-
-1. O PDF foi baixado no seu computador
-2. Abra o Google Forms do SMU:
-   https://docs.google.com/forms/d/e/1FAIpQLSecrCe2Xanm-Srq590wiOzNXaD_UwJAoTwCYukTIVUoMbFW0w/viewform
-
-3. Preencha os dados no Google Forms
-4. No campo de observações, mencione:
-   "Dados completos em anexo - PDF gerado automaticamente"
-
-5. Anexe:
-   • O PDF que acabou de baixar
-   • Os documentos solicitados
-
-6. Clique em ENVIAR
-
-Obrigado por utilizar o sistema do SMU!
-                `);
-                
-                // Abrir Google Forms
-                window.open('https://docs.google.com/forms/d/e/1FAIpQLSecrCe2Xanm-Srq590wiOzNXaD_UwJAoTwCYukTIVUoMbFW0w/viewform', '_blank');
-            }
-        }
-
-        // Event Listeners
-        btnGerarPDF.addEventListener('click', gerarPDF);
-        btnBaixarPDF.addEventListener('click', baixarPDF);
-        btnAbrirGoogleForms.addEventListener('click', abrirGoogleForms);
-        btnEnviarCompleto.addEventListener('click', enviarDocumentoCompleto);
+        });
 
         // Função para resetar formulário completamente
         function resetarFormulario() {
             if (confirm('Deseja limpar todo o formulário? Todos os dados serão perdidos.')) {
-                // Resetar estado
-                participantesConfirmados = false;
-                pdfDoc = null;
-                dadosFormulario = {};
-                
                 // Esconder todas as seções exceto as primeiras
                 secoesOcultas.forEach(id => {
                     const elemento = document.getElementById(id);
@@ -1001,47 +495,14 @@ Obrigado por utilizar o sistema do SMU!
                     }
                 });
                 
-                // Esconder preview
-                previewSection.style.display = 'none';
-                previewSection.classList.add('hidden-section');
-                
-                // Esconder caixa de confirmação
-                participantesConfirmadosBox.style.display = 'none';
-                participantesConfirmadosBox.classList.add('hidden-section');
-                
                 // Mostrar mensagem inicial
                 mensagemInicial.style.display = 'block';
                 
-                // Habilitar campos
-                inputParticipantes.disabled = false;
-                btnConfirmar.disabled = false;
+                // Resetar o formulário (isso limpa os valores)
+                document.getElementById('formInterdicao').reset();
                 
-                // Resetar todos os campos
-                document.querySelectorAll('#formInterdicao input, #formInterdicao select, #formInterdicao textarea').forEach(element => {
-                    if (element.type !== 'button') {
-                        element.value = '';
-                    }
-                });
-                
-                // Resetar checkbox
-                document.getElementById('declaracao').checked = false;
-                document.getElementById('interdicao_parcial').checked = false;
-                
-                // Resetar file inputs
-                document.getElementById('input-file-oficio').value = '';
-                document.getElementById('input-file-croqui').value = '';
-                document.getElementById('input-file-crlv').value = '';
-                
-                // Resetar os displays
+                // Resetar o display do protocolo
                 document.getElementById('numero-protocolo-display').textContent = '_____';
-                numeroParticipantesDisplay.textContent = '0';
-                
-                // Resetar preview
-                pdfPreview.innerHTML = '';
-                
-                // Resetar botões
-                btnGerarPDF.innerHTML = '<i class="bi bi-file-earmark-pdf"></i> Gerar PDF com Dados';
-                btnGerarPDF.disabled = false;
                 
                 // Focar no primeiro campo
                 document.getElementById('input-protocolo').focus();
@@ -1054,10 +515,7 @@ Obrigado por utilizar o sistema do SMU!
             document.getElementById('input-protocolo').focus();
             
             // Verificar se já tem participantes preenchidos (em caso de refresh)
-            if (parseInt(inputParticipantes.value) >= 1) {
-                // Se já tiver valor, mostrar botão de confirmação destacado
-                btnConfirmar.classList.add('btn-success');
-            }
+            verificarParticipantes();
         });
     </script>
 
@@ -1065,9 +523,3 @@ Obrigado por utilizar o sistema do SMU!
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 </body>
 </html>
-
-
-
-
-
-
