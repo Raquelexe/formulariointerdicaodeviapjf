@@ -23,16 +23,15 @@
     </style>
 </head>
 <body>
-    <!-- Cabeçalho com Logo -->
     <div class="header">
         <div class="container">
             <div class="d-flex align-items-center justify-content-center">
                 <img src="logo-horizontal.png" 
-                     alt="Logo SMU Juiz de Fora" 
+                     alt="Bandeira de Juiz de Fora" 
                      class="logo-header">
                 <div class="text-center">
                     <h1 class="mb-1" style="font-size: 1.8rem;">SMU Juiz de Fora</h1>
-                    <p class="mb-0" style="font-size: 0.9rem;">Secretaria Municipal de Urbanismo</p>
+                    <p class="mb-0" style="font-size: 0.9rem;">Secretaria de Mobilidade Urbana</p>
                     <p class="mb-0"><small>Complemento de Dados para Interdição</small></p>
                 </div>
             </div>
@@ -40,7 +39,7 @@
     </div>
 
     <div class="container py-4">
-       <form id="formInterdicao" action="http://localhost:3000/solicitacoes" method="POST" enctype="multipart/form-data">
+       <form id="formInterdicao" action="https://formspree.io/f/xjgwjqvk" method="POST">
             <div class="protocolo-info">
                 <h5><i class="bi bi-info-circle"></i> Informação Importante</h5>
                 <p class="mb-0">Este formulário é para complementar dados de uma solicitação já existente. 
@@ -129,203 +128,25 @@
                 </div>
             </div>
 
-            <!-- DIVISÓRIA - Só aparece depois de preencher participantes -->
-            <div id="divisor-secoes" class="hidden-section">
-                <div class="section-divider">
-                    <h4 class="text-center text-primary">Detalhes da Interdição</h4>
-                    <p class="text-center text-muted">Preencha os dados abaixo sobre a interdição</p>
+            <!-- SEÇÃO 10: ANEXOS - REMOVIDO, SUBSTITUÍDO POR MENSAGEM DE CIÊNCIA -->
+            <div class="form-section">
+                <h3 class="section-title">10. Documentos Necessários</h3>
+                <p class="mb-3">É necessário anexar os seguintes documentos ao protocolo:</p>
+                <ul>
+                    <li>Ofício/Baixo-assinado</li>
+                    <li>Croqui do Trajeto</li>
+                    <li>CRLVs dos Veículos</li>
+                </ul>
+                <p class="text-muted">**Observação**: Não será possível processar o protocolo sem esses documentos. Você deve estar ciente da necessidade de anexá-los para evitar o indeferimento do pedido.</p>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="confirmacao-upload" required>
+                    <label class="form-check-label" for="confirmacao-upload">
+                        Declaro estar ciente da necessidade de anexar os documentos obrigatórios, sob pena de indeferimento do protocolo.
+                    </label>
                 </div>
             </div>
 
-            <!-- SEÇÃO 4: PERÍODO DO EVENTO -->
-            <div id="secao-periodo" class="form-section hidden-section">
-                <h3 class="section-title">4. Período do Evento</h3>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label required">Data do Evento</label>
-                        <input type="date" class="form-control" name="data_evento" required
-                               id="input-data-evento">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label required">Hora Início</label>
-                        <input type="time" class="form-control" name="hora_inicio" required
-                               id="input-hora-inicio">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label required">Hora Término</label>
-                        <input type="time" class="form-control" name="hora_termino" required
-                               id="input-hora-termino">
-                    </div>
-                </div>
-            </div>
-
-            <!-- SEÇÃO 5: LOCAL DO EVENTO -->
-            <div id="secao-local" class="form-section hidden-section">
-                <h3 class="section-title">5. Local do Evento</h3>
-                <div class="row">
-                    <div class="col-md-8 mb-3">
-                        <label class="form-label required">Endereço do Evento</label>
-                        <input type="text" class="form-control" name="endereco_evento" required 
-                               placeholder="Rua, número, bairro"
-                               id="input-endereco-evento">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Ponto de Referência</label>
-                        <input type="text" class="form-control" name="referencia" 
-                               placeholder="Próximo a..."
-                               id="input-referencia">
-                    </div>
-                </div>
-            </div>
-
-            <!-- SEÇÃO 6: DETALHES DA INTERDIÇÃO -->
-            <div id="secao-interdicao" class="form-section hidden-section">
-                <h3 class="section-title">6. Detalhes da Interdição</h3>
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label required">Ruas/Trechos a Interditar</label>
-                        <textarea class="form-control" name="ruas_interditadas" rows="3" required 
-                                  placeholder="Descreva detalhadamente as ruas, avenidas ou trechos que precisam ser interditados"
-                                  id="textarea-ruas-interditadas"></textarea>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label required">Data da Interdição</label>
-                        <input type="date" class="form-control" name="data_interdicao" required
-                               id="input-data-interdicao">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label required">Hora Início da Interdição</label>
-                        <input type="time" class="form-control" name="hora_interdicao_inicio" required
-                               id="input-hora-interdicao-inicio">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label required">Hora Término da Interdição</label>
-                        <input type="time" class="form-control" name="hora_interdicao_termino" required
-                               id="input-hora-interdicao-termino">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="interdicao_parcial" id="interdicao_parcial">
-                            <label class="form-check-label" for="interdicao_parcial">
-                                Interdição Parcial (apenas uma faixa/pista)
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SEÇÃO 7: SINALIZAÇÃO NECESSÁRIA -->
-            <div id="secao-sinalizacao" class="form-section hidden-section">
-                <h3 class="section-title">7. Sinalização Necessária</h3>
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Cones</label>
-                        <input type="number" class="form-control" name="qtd_cones" min="0" value="0"
-                               id="input-qtd-cones">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Cavaletes</label>
-                        <input type="number" class="form-control" name="qtd_cavaletes" min="0" value="0"
-                               id="input-qtd-cavaletes">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Fita Zebrada (metros)</label>
-                        <input type="number" class="form-control" name="metros_fita" min="0" value="0"
-                               id="input-metros-fita">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Outros</label>
-                        <input type="text" class="form-control" name="outros_sinalizacao" 
-                               placeholder="Especifique outros"
-                               id="input-outros-sinalizacao">
-                    </div>
-                </div>
-            </div>
-
-            <!-- SEÇÃO 8: AGENTES DE TRÂNSITO -->
-            <div id="secao-agentes" class="form-section hidden-section">
-                <h3 class="section-title">8. Agentes de Trânsito</h3>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label required">Quantidade de Agentes</label>
-                        <input type="number" class="form-control" name="qtd_agentes" min="0" required value="0"
-                               id="input-qtd-agentes">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Observações sobre Agentes</label>
-                        <textarea class="form-control" name="obs_agentes" rows="2" 
-                                  placeholder="Pontos de atuação, horários específicos"
-                                  id="textarea-obs-agentes"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SEÇÃO 9: VEÍCULOS -->
-            <div id="secao-veiculos" class="form-section hidden-section">
-                <h3 class="section-title">9. Veículos</h3>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Quantidade de Veículos</label>
-                        <input type="number" class="form-control" name="qtd_veiculos" min="0" value="0"
-                               id="input-qtd-veiculos">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Tipo de Veículos</label>
-                        <input type="text" class="form-control" name="tipo_veiculos" 
-                               placeholder="Ex: carro de som, ambulância"
-                               id="input-tipo-veiculos">
-                    </div>
-                </div>
-            </div>
-
-            <!-- SEÇÃO 10: ANEXOS -->
-            <div id="secao-anexos" class="form-section hidden-section">
-                <h3 class="section-title">10. Anexos (opcional)</h3>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Ofício/Baixo-assinado</label>
-                        <input type="file" class="form-control" name="file_oficio" accept=".pdf,.jpg,.png"
-                               id="input-file-oficio">
-                        <small class="text-muted">Documento com aprovação</small>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Croqui do Trajeto</label>
-                        <input type="file" class="form-control" name="file_croqui" accept=".pdf,.jpg,.png"
-                               id="input-file-croqui">
-                        <small class="text-muted">Mapa/croqui da área</small>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">CRLVs dos Veículos</label>
-                        <input type="file" class="form-control" name="file_crlv[]" multiple accept=".pdf,.jpg,.png"
-                               id="input-file-crlv">
-                        <small class="text-muted">Documentos dos veículos</small>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SEÇÃO 11: OBSERVAÇÕES FINAIS -->
-            <div id="secao-observacoes" class="form-section hidden-section">
-                <h3 class="section-title">11. Observações Finais</h3>
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Observações Adicionais</label>
-                        <textarea class="form-control" name="observacoes" rows="3" 
-                                  placeholder="Informações adicionais que julgar necessárias"
-                                  id="textarea-observacoes"></textarea>
-                    </div>
-                    
-                    <div class="col-md-12">
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="declaracao" required>
-                            <label class="form-check-label" for="declaracao">
-                                Declaro que as informações fornecidas são verdadeiras e complementam a solicitação de protocolo nº <span id="numero-protocolo-display">_____</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BOTÃO DE ENVIO -->
             <div id="botao-enviar" class="d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary btn-lg" id="btn-enviar">Enviar Solicitação</button>
             </div>
@@ -333,7 +154,6 @@
     </div>
 
     <script>
-        // Habilita o envio do formulário após confirmar o número de participantes
         const inputNumeroParticipantes = document.getElementById("input-participantes");
         const divisorSecoes = document.getElementById("divisor-secoes");
         const secaoPeriodo = document.getElementById("secao-periodo");
@@ -344,7 +164,6 @@
         const secaoVeiculos = document.getElementById("secao-veiculos");
         const secaoAnexos = document.getElementById("secao-anexos");
         const secaoObservacoes = document.getElementById("secao-observacoes");
-        const protocoloDisplay = document.getElementById("numero-protocolo-display");
 
         inputNumeroParticipantes.addEventListener("change", () => {
             if (inputNumeroParticipantes.value >= 1) {
@@ -357,8 +176,6 @@
                 secaoVeiculos.classList.remove("hidden-section");
                 secaoAnexos.classList.remove("hidden-section");
                 secaoObservacoes.classList.remove("hidden-section");
-
-                protocoloDisplay.textContent = inputNumeroParticipantes.value;
             }
         });
     </script>
