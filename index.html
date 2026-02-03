@@ -43,22 +43,22 @@ body { background:#f8f9fa; font-family:Segoe UI,sans-serif; }
 </div>
 
 <div class="container py-4">
-    <form action="https://formspree.io/f/SEU_ID_DO_FORMSPREE" method="POST">
+    <form action="https://formspree.io/f/xjgwjqvk" method="POST">
 
         <div class="form-section">
-            <h3 class="section-title">1. Protocolo</h3>
+            <h3 class="section-title">1. Dados do Protocolo</h3>
             <input class="form-control mb-3" name="numero_protocolo" required placeholder="Número do protocolo">
             <input class="form-control" type="date" name="data_protocolo">
         </div>
 
         <div class="form-section">
-            <h3 class="section-title">2. Responsável</h3>
+            <h3 class="section-title">2. Dados do Responsável</h3>
             <input class="form-control mb-3" name="nome_responsavel" required placeholder="Nome completo">
             <input class="form-control" name="telefone" required placeholder="Telefone">
         </div>
 
         <div class="form-section">
-            <h3 class="section-title">3. Evento</h3>
+            <h3 class="section-title">3. Dados do Evento</h3>
             <input class="form-control mb-3" name="nome_evento" required placeholder="Nome do evento">
             <select class="form-select mb-3" name="tipo_evento" required>
                 <option value="">Tipo do evento</option>
@@ -73,7 +73,7 @@ body { background:#f8f9fa; font-family:Segoe UI,sans-serif; }
 
         <div id="resto" class="hidden">
             <div class="form-section">
-                <h3 class="section-title">4. Período</h3>
+                <h3 class="section-title">4. Dia e Hora do Evento</h3>
                 <input class="form-control mb-3" type="date" name="data_evento" required>
                 <input class="form-control mb-3" type="time" name="hora_inicio" required>
                 <input class="form-control" type="time" name="hora_termino" required>
@@ -86,7 +86,7 @@ body { background:#f8f9fa; font-family:Segoe UI,sans-serif; }
             </div>
 
             <div class="form-section">
-                <h3 class="section-title">6. Interdição</h3>
+                <h3 class="section-title">6. Detalhes da Interdição</h3>
                 <textarea class="form-control mb-3" name="ruas_interditadas" required placeholder="Ruas a interditar"></textarea>
                 <input class="form-control mb-3" type="date" name="data_interdicao" required>
                 <input class="form-control mb-3" type="time" name="hora_interdicao_inicio" required>
@@ -94,7 +94,7 @@ body { background:#f8f9fa; font-family:Segoe UI,sans-serif; }
             </div>
 
             <div class="form-section">
-                <h3 class="section-title">7. Sinalização</h3>
+                <h3 class="section-title">7. Sinalização que possui</h3>
                 <input class="form-control mb-2" name="qtd_cones" type="number" value="0" min="0">
                 <input class="form-control mb-2" name="qtd_cavaletes" type="number" value="0" min="0">
                 <input class="form-control mb-2" name="metros_fita" type="number" value="0" min="0">
@@ -102,13 +102,13 @@ body { background:#f8f9fa; font-family:Segoe UI,sans-serif; }
             </div>
 
             <div class="form-section">
-                <h3 class="section-title">8. Agentes de Trânsito</h3>
+                <h3 class="section-title">8. Necessita de Agentes de Trânsito</h3>
                 <input class="form-control mb-2" name="qtd_agentes" type="number" min="0">
                 <textarea class="form-control" name="obs_agentes" placeholder="Observações sobre agentes"></textarea>
             </div>
 
             <div class="form-section">
-                <h3 class="section-title">9. Veículos</h3>
+                <h3 class="section-title">9. Haverá Veículos</h3>
                 <input class="form-control mb-2" name="qtd_veiculos" type="number" min="0">
                 <input class="form-control mb-2" name="tipo_veiculos" type="text" placeholder="Tipo de veículos">
             </div>
@@ -147,4 +147,5 @@ document.getElementById('participantes').addEventListener('change', function() {
 
 </body>
 </html>
+
 
