@@ -1,184 +1,149 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitação de Interdição - SMU JF</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        :root { --primary: #0066cc; --secondary: #003366; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; }
-        .header { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; padding: 1.5rem 0; }
-        .form-section { background: white; border-radius: 10px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .required::after { content: " *"; color: red; }
-        .section-title { color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
-        .logo-header { max-height: 70px; margin-right: 15px; }
-        .protocolo-info { background: #e7f3ff; border-left: 4px solid var(--primary); padding: 15px; border-radius: 5px; margin-bottom: 20px; }
-        .hidden-section { display: none; }
-        .section-divider { border-top: 2px dashed #dee2e6; margin: 2rem 0; padding-top: 2rem; }
-        @media (max-width: 768px) {
-            .logo-header { max-height: 50px; margin-right: 10px; }
-            .header { padding: 1rem 0; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitação de Interdição - SMU</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+:root { --primary:#0066cc; }
+body { background:#f8f9fa; font-family:Segoe UI,sans-serif; }
+.header { background: linear-gradient(135deg, var(--primary) 0%, #003366 100%); color: white; padding: 1.5rem 0; }
+.header .logo { max-height: 70px; }
+.form-section {
+  background:#fff;
+  border-radius:10px;
+  padding:1.5rem;
+  margin-bottom:1.5rem;
+  box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+.section-title {
+  color:var(--primary);
+  border-bottom:2px solid var(--primary);
+  margin-bottom:20px;
+}
+.required::after { content:" *"; color:red; }
+.hidden { display:none; }
+</style>
 </head>
+
 <body>
-    <div class="header">
-        <div class="container">
-            <div class="d-flex align-items-center justify-content-center">
-                <img src="logo-horizontal.png" 
-                     alt="Bandeira de Juiz de Fora" 
-                     class="logo-header">
-                <div class="text-center">
-                    <h1 class="mb-1" style="font-size: 1.8rem;">SMU Juiz de Fora</h1>
-                    <p class="mb-0" style="font-size: 0.9rem;">Secretaria de Mobilidade Urbana</p>
-                    <p class="mb-0"><small>Complemento de Dados para Interdição</small></p>
-                </div>
+
+<!-- Cabeçalho com Logo -->
+<div class="header">
+    <div class="container text-center">
+        <div class="d-flex justify-content-center align-items-center">
+            <img src="logo-horizontal.png" alt="Bandeira da Prefeitura de Juiz de Fora" class="logo">
+            <div>
+                <h1 class="mb-0" style="font-size: 2rem;">Secretaria de Mobilidade de Urbana</h1>
+                <p><strong>Complemento de Dados para Interdição</strong></p>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="container py-4">
-       <form id="formInterdicao" action="https://formspree.io/f/xjgwjqvk" method="POST">
-            <div class="protocolo-info">
-                <h5><i class="bi bi-info-circle"></i> Informação Importante</h5>
-                <p class="mb-0">Este formulário é para complementar dados de uma solicitação já existente. 
-                Você deve ter o <strong>número do protocolo</strong> gerado pelo sistema principal do SMU.</p>
+<div class="container py-4">
+    <form action="https://formspree.io/f/SEU_ID_DO_FORMSPREE" method="POST">
+
+        <div class="form-section">
+            <h3 class="section-title">1. Protocolo</h3>
+            <input class="form-control mb-3" name="numero_protocolo" required placeholder="Número do protocolo">
+            <input class="form-control" type="date" name="data_protocolo">
+        </div>
+
+        <div class="form-section">
+            <h3 class="section-title">2. Responsável</h3>
+            <input class="form-control mb-3" name="nome_responsavel" required placeholder="Nome completo">
+            <input class="form-control" name="telefone" required placeholder="Telefone">
+        </div>
+
+        <div class="form-section">
+            <h3 class="section-title">3. Evento</h3>
+            <input class="form-control mb-3" name="nome_evento" required placeholder="Nome do evento">
+            <select class="form-select mb-3" name="tipo_evento" required>
+                <option value="">Tipo do evento</option>
+                <option>Esportivo</option>
+                <option>Cultural</option>
+                <option>Religioso</option>
+                <option>Outro</option>
+            </select>
+            <input class="form-control mb-3" type="number" id="participantes" name="participantes" required placeholder="Número de participantes">
+            <textarea class="form-control" name="descricao_evento" placeholder="Descrição do evento"></textarea>
+        </div>
+
+        <div id="resto" class="hidden">
+            <div class="form-section">
+                <h3 class="section-title">4. Período</h3>
+                <input class="form-control mb-3" type="date" name="data_evento" required>
+                <input class="form-control mb-3" type="time" name="hora_inicio" required>
+                <input class="form-control" type="time" name="hora_termino" required>
             </div>
 
-            <!-- SEÇÃO 1: PROTOCOLO -->
             <div class="form-section">
-                <h3 class="section-title">1. Número do Protocolo</h3>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label required">Número do Protocolo SMU</label>
-                        <input type="text" class="form-control" name="numero_protocolo" required
-                               placeholder="Digite o número do protocolo fornecido pelo SMU"
-                               id="input-protocolo">
-                        <small class="text-muted">Exemplo: SMU-20231201-00123 ou 2023/001234</small>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Data do Protocolo</label>
-                        <input type="date" class="form-control" name="data_protocolo">
-                        <small class="text-muted">Data em que o protocolo foi gerado (opcional)</small>
-                    </div>
-                </div>
+                <h3 class="section-title">5. Local</h3>
+                <input class="form-control mb-3" name="endereco_evento" required placeholder="Endereço">
+                <input class="form-control" name="referencia" placeholder="Referência">
             </div>
 
-            <!-- SEÇÃO 2: DADOS DO RESPONSÁVEL -->
             <div class="form-section">
-                <h3 class="section-title">2. Dados do Responsável</h3>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label required">Nome Completo do Responsável</label>
-                        <input type="text" class="form-control" name="nome_responsavel" required
-                               id="input-nome-responsavel">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label required">Telefone para Contato</label>
-                        <input type="tel" class="form-control" name="telefone" required 
-                               placeholder="(32) 99999-9999"
-                               id="input-telefone">
-                    </div>
-                </div>
+                <h3 class="section-title">6. Interdição</h3>
+                <textarea class="form-control mb-3" name="ruas_interditadas" required placeholder="Ruas a interditar"></textarea>
+                <input class="form-control mb-3" type="date" name="data_interdicao" required>
+                <input class="form-control mb-3" type="time" name="hora_interdicao_inicio" required>
+                <input class="form-control" type="time" name="hora_interdicao_termino" required>
             </div>
 
-            <!-- SEÇÃO 3: DADOS BÁSICOS DO EVENTO -->
             <div class="form-section">
-                <h3 class="section-title">3. Dados Básicos do Evento</h3>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label required">Nome do Evento</label>
-                        <input type="text" class="form-control" name="nome_evento" required
-                               id="input-nome-evento">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label required">Tipo de Evento</label>
-                        <select class="form-select" name="tipo_evento" required
-                                id="select-tipo-evento">
-                            <option value="">Selecione...</option>
-                            <option value="corrida">Corrida de Rua</option>
-                            <option value="carnaval">Bloco de Carnaval</option>
-                            <option value="festival">Festival</option>
-                            <option value="show">Show/Espetáculo</option>
-                            <option value="esportivo">Evento Esportivo</option>
-                            <option value="religioso">Evento Religioso</option>
-                            <option value="feira">Feira/Exposição</option>
-                            <option value="obra">Obra/Construção</option>
-                            <option value="manifestacao">Manifestação</option>
-                            <option value="outro">Outro</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label required">Número de Participantes</label>
-                        <input type="number" class="form-control" name="participantes" min="1" required
-                               id="input-participantes">
-                        <small class="text-muted">Preencha este campo para continuar</small>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Público Esperado</label>
-                        <input type="number" class="form-control" name="publico_esperado" min="0"
-                               id="input-publico-esperado">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Descrição do Evento</label>
-                        <textarea class="form-control" name="descricao_evento" rows="2"
-                                  id="textarea-descricao-evento"></textarea>
-                    </div>
-                </div>
+                <h3 class="section-title">7. Sinalização</h3>
+                <input class="form-control mb-2" name="qtd_cones" type="number" value="0" min="0">
+                <input class="form-control mb-2" name="qtd_cavaletes" type="number" value="0" min="0">
+                <input class="form-control mb-2" name="metros_fita" type="number" value="0" min="0">
+                <input class="form-control mb-2" name="outros_sinalizacao" type="text" placeholder="Outros">
             </div>
 
-            <!-- SEÇÃO 10: ANEXOS - REMOVIDO, SUBSTITUÍDO POR MENSAGEM DE CIÊNCIA -->
             <div class="form-section">
-                <h3 class="section-title">10. Documentos Necessários</h3>
-                <p class="mb-3">É necessário anexar os seguintes documentos ao protocolo:</p>
+                <h3 class="section-title">8. Agentes de Trânsito</h3>
+                <input class="form-control mb-2" name="qtd_agentes" type="number" min="0">
+                <textarea class="form-control" name="obs_agentes" placeholder="Observações sobre agentes"></textarea>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">9. Veículos</h3>
+                <input class="form-control mb-2" name="qtd_veiculos" type="number" min="0">
+                <input class="form-control mb-2" name="tipo_veiculos" type="text" placeholder="Tipo de veículos">
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">10. Ciência dos Anexos</h3>
+                <p>Você deve anexar os seguintes documentos no protocolo:</p>
                 <ul>
                     <li>Ofício/Baixo-assinado</li>
                     <li>Croqui do Trajeto</li>
                     <li>CRLVs dos Veículos</li>
                 </ul>
-                <p class="text-muted">**Observação**: Não será possível processar o protocolo sem esses documentos. Você deve estar ciente da necessidade de anexá-los para evitar o indeferimento do pedido.</p>
-                
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="confirmacao-upload" required>
-                    <label class="form-check-label" for="confirmacao-upload">
-                        Declaro estar ciente da necessidade de anexar os documentos obrigatórios, sob pena de indeferimento do protocolo.
+                    <input class="form-check-input" type="checkbox" name="declaracao" required>
+                    <label class="form-check-label" for="declaracao">
+                        Declaro que estou ciente da necessidade de anexar os documentos citados acima para o protocolo.
                     </label>
                 </div>
             </div>
 
-            <div id="botao-enviar" class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary btn-lg" id="btn-enviar">Enviar Solicitação</button>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary btn-lg">Enviar Solicitação</button>
             </div>
-        </form>
-    </div>
+        </div>
 
-    <script>
-        const inputNumeroParticipantes = document.getElementById("input-participantes");
-        const divisorSecoes = document.getElementById("divisor-secoes");
-        const secaoPeriodo = document.getElementById("secao-periodo");
-        const secaoLocal = document.getElementById("secao-local");
-        const secaoInterdicao = document.getElementById("secao-interdicao");
-        const secaoSinalizacao = document.getElementById("secao-sinalizacao");
-        const secaoAgentes = document.getElementById("secao-agentes");
-        const secaoVeiculos = document.getElementById("secao-veiculos");
-        const secaoAnexos = document.getElementById("secao-anexos");
-        const secaoObservacoes = document.getElementById("secao-observacoes");
+    </form>
+</div>
 
-        inputNumeroParticipantes.addEventListener("change", () => {
-            if (inputNumeroParticipantes.value >= 1) {
-                divisorSecoes.classList.remove("hidden-section");
-                secaoPeriodo.classList.remove("hidden-section");
-                secaoLocal.classList.remove("hidden-section");
-                secaoInterdicao.classList.remove("hidden-section");
-                secaoSinalizacao.classList.remove("hidden-section");
-                secaoAgentes.classList.remove("hidden-section");
-                secaoVeiculos.classList.remove("hidden-section");
-                secaoAnexos.classList.remove("hidden-section");
-                secaoObservacoes.classList.remove("hidden-section");
-            }
-        });
-    </script>
+<script>
+document.getElementById('participantes').addEventListener('change', function() {
+  if (this.value > 0) {
+    document.getElementById('resto').classList.remove('hidden');
+  }
+});
+</script>
+
 </body>
 </html>
-
