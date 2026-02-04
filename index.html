@@ -95,16 +95,21 @@ body { background:#f8f9fa; font-family:Segoe UI,sans-serif; }
 
             <div class="form-section">
                 <h3 class="section-title">7. Sinalização que possui</h3>
+                 <h2>Cones</h2>
                 <input class="form-control mb-2" name="qtd_cones" type="number" value="0" min="0">
+                <h2>Cavaletes</h2>
                 <input class="form-control mb-2" name="qtd_cavaletes" type="number" value="0" min="0">
+                <h3>Fita zebrada</h3>
                 <input class="form-control mb-2" name="metros_fita" type="number" value="0" min="0">
+                <h3>Outros</h3>
                 <input class="form-control mb-2" name="outros_sinalizacao" type="text" placeholder="Outros">
             </div>
 
             <div class="form-section">
-                <h3 class="section-title">8. Necessita de Agentes de Trânsito</h3>
-                <input class="form-control mb-2" name="qtd_agentes" type="number" min="0">
-                <textarea class="form-control" name="obs_agentes" placeholder="Observações sobre agentes"></textarea>
+                <h3 class="section-title">8. Necessita de Apoio da SMU</h3>
+                <input type="radio" name="resposta" value="sim" /> Sim
+                <input type="radio" name="resposta" value="nao" /> Não   
+                <textarea class="form-control" name="obs" placeholder="Observações sobre apoio"></textarea>
             </div>
 
             <div class="form-section">
@@ -147,6 +152,7 @@ document.getElementById('participantes').addEventListener('change', function() {
 
 </body>
 </html>
+
 
 
 
